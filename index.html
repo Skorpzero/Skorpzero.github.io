@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title> Задание №5 </title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+
+        <div class="wrapper">
+            <h1> Калькулятор стоимости заказа </h1>
+
+            <form id="calc-form">
+                <div class="field">
+                    <label for="quantity"> Количество товара </label>
+                    <input type="text" id="quantity" name="quantity" placeholder="Например, 3">
+                </div>
+
+                <div class="field">
+                    <label for="product"> Товар </label>
+                    <select id="product" name="product">
+                        <option value="Ноутбук" data-price="55000">Ноутбук — 55 000 ₽</option>
+                        <option value="Мышь" data-price="1200">Мышь — 1 200 ₽</option>
+                        <option value="Клавиатура" data-price="2500">Клавиатура — 2 500 ₽</option>
+                        <option value="Монитор" data-price="18000">Монитор — 18 000 ₽</option>
+                    </select>
+                </div>
+
+                <button type="button" id="calc-btn"> Посчитать стоимость </button>
+
+                <p id="error-message" class="error" hidden></p>
+                <p id="result" class="result"></p>
+            </form>
+        </div>
+
+    </body>
+</html>
