@@ -32,7 +32,7 @@
         var total;
 
         if (!quantityPattern.test(quantityValue)) {
-            showError("Введите количество товара целым положительным числом без букв и других символов.");
+            showError("Введите целое положительное число без букв и знаков.");
             return;
         }
 
