@@ -3,6 +3,33 @@
 
     var quantityPattern = /^[1-9][0-9]*$/;
 
+    var services = {
+        landing: {
+            price: 15000,
+            options: [],
+            property: null
+        },
+        shop: {
+            price: 40000,
+            options: [
+                {name: "Базовый тариф", price: 0},
+                {name: "Расширенный тариф", price: 15000},
+                {name: "Премиум тариф", price: 30000}
+            ],
+            property: null
+        },
+        support: {
+            price: 5000,
+            options: [],
+            property: {name: "Срочная поддержка 24/7", price: 3000}
+        }
+    };
+
+    function getSelectedService() {
+        var checked = document.querySelector("input[name='service']:checked");
+        return services[checked.value];
+    }
+
     function showError(message) {
         var errorElement = document.getElementById("error-message");
         var resultElement = document.getElementById("result");
@@ -17,18 +44,53 @@
         errorElement.hidden = true;
     }
 
-    function showResult(total) {
-        var resultElement = document.getElementById("result");
-        resultElement.textContent = "Итоговая стоимость: " + total + " ₽";
+    function fillOptions(service) {
+        var select = document.getElementById("option-select");
+        var index;
+        var item;
+
+        select.textContent = "";
+
+        for (index = 0; index < service.options.length; index += 1) {
+            item = document.createElement("option");
+            item.value = String(index);
+            item.textContent = service.options[index].name + " (+" +
+                    service.options[index].price.toLocaleString("ru-RU") +
+                    " ₽)";
+            select.appendChild(item);
+        }
     }
 
-    function calculateTotal() {
-        var quantityField = document.getElementById("quantity");
-        var quantityValue = quantityField.value.trim();
-        var productSelect = document.getElementById("product");
-        var selectedOption = productSelect.options[productSelect.selectedIndex];
-        var price;
-        var quantity;
+    function updateVisibility() {
+        var service = getSelectedService();
+        var optionBlock = document.getElementById("option-block");
+        var propertyBlock = document.getElementById("property-block");
+        var propertyCheck = document.getElementById("property-check");
+        var propertyLabel = document.getElementById("property-label");
+        var hasOptions = service.options.length > 0;
+        var hasProperty = service.property !== null;
+
+        optionBlock.hidden = !hasOptions;
+        propertyBlock.hidden = !hasProperty;
+        propertyCheck.checked = false;
+
+        if (hasOptions) {
+            fillOptions(service);
+        }
+
+        if (hasProperty) {
+            propertyLabel.textContent = service.property.name + " (+" +
+                    service.property.price.toLocaleString("ru-RU") +
+                    " ₽)";
+        }
+    }
+
+    function calculate() {
+        var service = getSelectedService();
+        var quantityValue = document.getElementById("quantity").value.trim();
+        var select = document.getElementById("option-select");
+        var propertyCheck = document.getElementById("property-check");
+        var unitPrice = service.price;
         var total;
 
         if (!quantityPattern.test(quantityValue)) {
@@ -38,16 +100,38 @@
 
         hideError();
 
-        quantity = parseInt(quantityValue, 10);
-        price = parseInt(selectedOption.getAttribute("data-price"), 10);
-        total = quantity * price;
+        if (service.options.length > 0) {
+            unitPrice += service.options[select.selectedIndex].price;
+        }
 
-        showResult(total);
+        if (service.property !== null && propertyCheck.checked) {
+            unitPrice += service.property.price;
+        }
+
+        total = parseInt(quantityValue, 10) * unitPrice;
+
+        document.getElementById("result").textContent =
+                "Стоимость: " + total.toLocaleString("ru-RU") + " ₽";
+    }
+
+    function onFormChange(event) {
+        if (event.target.name === "service") {
+            updateVisibility();
+        }
+        calculate();
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        var calcButton = document.getElementById("calc-btn");
-        calcButton.addEventListener("click", calculateTotal);
+        var form = document.getElementById("calc-form");
+
+        form.addEventListener("input", onFormChange);
+        form.addEventListener("change", onFormChange);
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+        });
+
+        updateVisibility();
+        calculate();
     });
 
 }());

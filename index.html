@@ -3,35 +3,51 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title> Задание №5 </title>
+        <title> Задание №6 </title>
         <link rel="stylesheet" href="styles.css">
         <script src="script.js" defer></script>
     </head>
     <body>
 
         <div class="wrapper">
-            <h1> Калькулятор стоимости заказа </h1>
+            <h1> Калькулятор стоимости услуги </h1>
 
             <form id="calc-form">
-                <div class="field">
-                    <label for="quantity"> Количество товара </label>
-                    <input type="text" id="quantity" name="quantity" placeholder="Например, 3">
-                </div>
 
                 <div class="field">
-                    <label for="product"> Товар </label>
-                    <select id="product" name="product">
-                        <option value="Ноутбук" data-price="65000">Ноутбук — 65 000 ₽</option>
-                        <option value="Мышь" data-price="1200">Мышь — 1 200 ₽</option>
-                        <option value="Клавиатура" data-price="2500">Клавиатура — 2 500 ₽</option>
-                        <option value="Монитор" data-price="18000">Монитор — 18 000 ₽</option>
-                    </select>
+                    <label for="quantity"> Количество </label>
+                    <input type="text" id="quantity" name="quantity" value="1">
                 </div>
 
-                <button type="button" id="calc-btn"> Посчитать стоимость </button>
+                <fieldset class="field">
+                    <legend> Тип услуги </legend>
+                    <div class="choice">
+                        <input type="radio" id="service-landing" name="service" value="landing" checked>
+                        <label for="service-landing"> Вёрстка лендинга — 15 000 ₽ </label>
+                    </div>
+                    <div class="choice">
+                        <input type="radio" id="service-shop" name="service" value="shop">
+                        <label for="service-shop"> Интернет-магазин — от 40 000 ₽ </label>
+                    </div>
+                    <div class="choice">
+                        <input type="radio" id="service-support" name="service" value="support">
+                        <label for="service-support"> Техподдержка — от 5 000 ₽ </label>
+                    </div>
+                </fieldset>
+
+                <div class="field" id="option-block" hidden>
+                    <label for="option-select"> Тариф </label>
+                    <select id="option-select" name="option"></select>
+                </div>
+
+                <div class="field choice" id="property-block" hidden>
+                    <input type="checkbox" id="property-check" name="property">
+                    <label for="property-check" id="property-label"></label>
+                </div>
 
                 <p id="error-message" class="error" hidden></p>
                 <p id="result" class="result"></p>
+
             </form>
         </div>
 
