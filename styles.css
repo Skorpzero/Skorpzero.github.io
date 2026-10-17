@@ -76,3 +76,7 @@ select {
     font-size: 18px;
     font-weight: bold;
 }
+
+[hidden] {
+    display: none !important;
+}
