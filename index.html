@@ -3,52 +3,43 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title> Задание №6 </title>
+        <title> Задание №7 </title>
         <link rel="stylesheet" href="styles.css">
         <script src="script.js" defer></script>
     </head>
     <body>
 
         <div class="wrapper">
-            <h1> Калькулятор стоимости услуги </h1>
+            <h1> Галерея изображений </h1>
 
-            <form id="calc-form">
+            <div class="slider">
+                <button type="button" class="arrow" id="arrow-prev" aria-label="Назад">
+                    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+                        <path d="M15 4 L7 12 L15 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
 
-                <div class="field">
-                    <label for="quantity"> Количество </label>
-                    <input type="text" id="quantity" name="quantity" value="1">
+                <div class="viewport">
+                    <ul class="track" id="track">
+                        <li class="slide"><img src="https://www.pravmir.ru/wp-content/uploads/2019/12/1024px-bashni_na_skale_u_bosfora_ajvazovskogo.jpg" alt="Изображение 1"></li>
+                        <li class="slide"><img src="https://i.pinimg.com/736x/3a/97/fd/3a97fd0c6e926abfaf75afe8561e7729.jpg" alt="Изображение 2"></li>
+                        <li class="slide"><img src="https://i.pinimg.com/originals/4d/bf/f0/4dbff04484f285b3bc3ffc9e98fdc1cb.png?nii=t" alt="Изображение 3"></li>
+                        <li class="slide"><img src="https://i.pinimg.com/originals/1f/73/84/1f7384b49b7dc8a1d24f090b20f416f0.jpg" alt="Изображение 4"></li>
+                        <li class="slide"><img src="https://i.pinimg.com/originals/76/b9/59/76b9597fd21a226a917c63dda84c3252.jpg" alt="Изображение 5"></li>
+                        <li class="slide"><img src="https://i.pinimg.com/originals/40/47/91/404791ef7c49e9e18d82d14376c5f6d9.webp?nii=t" alt="Изображение 6"></li>
+                        <li class="slide"><img src="https://i.pinimg.com/originals/bc/14/3d/bc143d1b1d97bc740c8953bd72a22fd3.png?nii=t" alt="Изображение 7"></li>
+                        <li class="slide"><img src="https://i.pinimg.com/736x/01/db/41/01db4192fae9855e70e6d67d00cdb988.jpg" alt="Изображение 8"></li>
+                    </ul>
                 </div>
 
-                <fieldset class="field">
-                    <legend> Тип услуги </legend>
-                    <div class="choice">
-                        <input type="radio" id="service-landing" name="service" value="landing" checked>
-                        <label for="service-landing"> Вёрстка лендинга — 15 000 ₽ </label>
-                    </div>
-                    <div class="choice">
-                        <input type="radio" id="service-shop" name="service" value="shop">
-                        <label for="service-shop"> Интернет-магазин — от 40 000 ₽ </label>
-                    </div>
-                    <div class="choice">
-                        <input type="radio" id="service-support" name="service" value="support">
-                        <label for="service-support"> Техподдержка — от 5 000 ₽ </label>
-                    </div>
-                </fieldset>
+                <button type="button" class="arrow" id="arrow-next" aria-label="Вперёд">
+                    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+                        <path d="M9 4 L17 12 L9 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
 
-                <div class="field" id="option-block" hidden>
-                    <label for="option-select"> Тариф </label>
-                    <select id="option-select" name="option"></select>
-                </div>
-
-                <div class="field choice" id="property-block" hidden>
-                    <input type="checkbox" id="property-check" name="property">
-                    <label for="property-check" id="property-label"></label>
-                </div>
-
-                <p id="error-message" class="error" hidden></p>
-                <p id="result" class="result"></p>
-
-            </form>
+            <div class="pager" id="pager"></div>
         </div>
 
     </body>

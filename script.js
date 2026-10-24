@@ -1,137 +1,98 @@
 (function () {
     "use strict";
 
-    var quantityPattern = /^[1-9][0-9]*$/;
+    var mobileQuery = window.matchMedia("(max-width: 600px)");
+    var currentPage = 0;
 
-    var services = {
-        landing: {
-            price: 15000,
-            options: [],
-            property: null
-        },
-        shop: {
-            price: 40000,
-            options: [
-                {name: "Базовый тариф", price: 0},
-                {name: "Расширенный тариф", price: 15000},
-                {name: "Премиум тариф", price: 30000}
-            ],
-            property: null
-        },
-        support: {
-            price: 5000,
-            options: [],
-            property: {name: "Срочная поддержка 24/7", price: 3000}
-        }
-    };
-
-    function getSelectedService() {
-        var checked = document.querySelector("input[name='service']:checked");
-        return services[checked.value];
+    function getPerView() {
+        return (mobileQuery.matches)
+            ? 1
+            : 3;
     }
 
-    function showError(message) {
-        var errorElement = document.getElementById("error-message");
-        var resultElement = document.getElementById("result");
-        errorElement.textContent = message;
-        errorElement.hidden = false;
-        resultElement.textContent = "";
+    function getTotal() {
+        return document.querySelectorAll("#track .slide").length;
     }
 
-    function hideError() {
-        var errorElement = document.getElementById("error-message");
-        errorElement.textContent = "";
-        errorElement.hidden = true;
+    function getPageCount() {
+        return Math.ceil(getTotal() / getPerView());
     }
 
-    function fillOptions(service) {
-        var select = document.getElementById("option-select");
+    function getOffset() {
+        var perView = getPerView();
+        return Math.min(currentPage * perView, getTotal() - perView);
+    }
+
+    function update() {
+        var track = document.getElementById("track");
+        var dots = document.querySelectorAll("#pager .pager-dot");
         var index;
-        var item;
 
-        select.textContent = "";
+        track.style.transform = "translateX(-" +
+                (getOffset() * 100 / getPerView()) + "%)";
 
-        for (index = 0; index < service.options.length; index += 1) {
-            item = document.createElement("option");
-            item.value = String(index);
-            item.textContent = service.options[index].name + " (+" +
-                    service.options[index].price.toLocaleString("ru-RU") +
-                    " ₽)";
-            select.appendChild(item);
+        for (index = 0; index < dots.length; index += 1) {
+            if (index === currentPage) {
+                dots[index].classList.add("active");
+                dots[index].setAttribute("aria-current", "true");
+            } else {
+                dots[index].classList.remove("active");
+                dots[index].removeAttribute("aria-current");
+            }
         }
     }
 
-    function updateVisibility() {
-        var service = getSelectedService();
-        var optionBlock = document.getElementById("option-block");
-        var propertyBlock = document.getElementById("property-block");
-        var propertyCheck = document.getElementById("property-check");
-        var propertyLabel = document.getElementById("property-label");
-        var hasOptions = service.options.length > 0;
-        var hasProperty = service.property !== null;
+    function goTo(page) {
+        var count = getPageCount();
+        currentPage = (page + count) % count;
+        update();
+    }
 
-        optionBlock.hidden = !hasOptions;
-        propertyBlock.hidden = !hasProperty;
-        propertyCheck.checked = false;
+    function buildPager() {
+        var pager = document.getElementById("pager");
+        var count = getPageCount();
+        var index;
+        var dot;
 
-        if (hasOptions) {
-            fillOptions(service);
-        }
+        pager.textContent = "";
 
-        if (hasProperty) {
-            propertyLabel.textContent = service.property.name + " (+" +
-                    service.property.price.toLocaleString("ru-RU") +
-                    " ₽)";
+        for (index = 0; index < count; index += 1) {
+            dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "pager-dot";
+            dot.setAttribute("data-page", String(index));
+            dot.setAttribute("aria-label", "Страница " + (index + 1) +
+                    " из " + count);
+            pager.appendChild(dot);
         }
     }
 
-    function calculate() {
-        var service = getSelectedService();
-        var quantityValue = document.getElementById("quantity").value.trim();
-        var select = document.getElementById("option-select");
-        var propertyCheck = document.getElementById("property-check");
-        var unitPrice = service.price;
-        var total;
+    function onPagerClick(event) {
+        var page = event.target.getAttribute("data-page");
 
-        if (!quantityPattern.test(quantityValue)) {
-            showError("Введите целое положительное число без букв и знаков.");
-            return;
+        if (page !== null) {
+            goTo(parseInt(page, 10));
         }
-
-        hideError();
-
-        if (service.options.length > 0) {
-            unitPrice += service.options[select.selectedIndex].price;
-        }
-
-        if (service.property !== null && propertyCheck.checked) {
-            unitPrice += service.property.price;
-        }
-
-        total = parseInt(quantityValue, 10) * unitPrice;
-
-        document.getElementById("result").textContent =
-                "Стоимость: " + total.toLocaleString("ru-RU") + " ₽";
     }
 
-    function onFormChange(event) {
-        if (event.target.name === "service") {
-            updateVisibility();
-        }
-        calculate();
+    function onBreakpointChange() {
+        currentPage = 0;
+        buildPager();
+        update();
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        var form = document.getElementById("calc-form");
-
-        form.addEventListener("input", onFormChange);
-        form.addEventListener("change", onFormChange);
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
+        document.getElementById("arrow-prev").addEventListener("click", function () {
+            goTo(currentPage - 1);
         });
+        document.getElementById("arrow-next").addEventListener("click", function () {
+            goTo(currentPage + 1);
+        });
+        document.getElementById("pager").addEventListener("click", onPagerClick);
+        mobileQuery.addEventListener("change", onBreakpointChange);
 
-        updateVisibility();
-        calculate();
+        buildPager();
+        update();
     });
 
 }());

@@ -6,7 +6,7 @@ body {
 }
 
 .wrapper {
-    max-width: 420px;
+    max-width: 960px;
     margin: 0 auto;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -20,63 +20,106 @@ h1 {
     margin-bottom: 20px;
 }
 
-.field {
-    margin-bottom: 16px;
+.slider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-fieldset {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 8px 12px;
+.viewport {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
-legend {
-    font-weight: bold;
+.track {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transition: transform 0.4s ease;
+}
+
+.slide {
+    flex: 0 0 33.3333%;
+    box-sizing: border-box;
     padding: 0 6px;
 }
 
-label {
-    font-weight: bold;
-}
-
-.field > label {
+.slide img {
     display: block;
-    margin-bottom: 6px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
-.choice {
+.arrow {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 6px 0;
-}
-
-.choice label {
-    font-weight: normal;
-    margin-bottom: 0;
-}
-
-input[type="text"],
-select {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
+    justify-content: center;
     border: 1px solid #999;
-    border-radius: 4px;
-    font-size: 15px;
+    border-radius: 50%;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
 }
 
-.error {
-    color: #b00020;
-    margin-top: 14px;
+.arrow:hover {
+    background-color: #e6eefb;
 }
 
-.result {
-    margin-top: 14px;
-    font-size: 18px;
-    font-weight: bold;
+.arrow:focus-visible,
+.pager-dot:focus-visible {
+    outline: 2px solid #2a6fdb;
+    outline-offset: 2px;
 }
 
-[hidden] {
-    display: none !important;
+.pager {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.pager-dot {
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    border: 1px solid #2a6fdb;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.pager-dot.active {
+    background-color: #2a6fdb;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .wrapper {
+        padding: 14px;
+    }
+
+    .slider {
+        gap: 6px;
+    }
+
+    .slide {
+        flex-basis: 100%;
+    }
+
+    .arrow {
+        width: 36px;
+        height: 36px;
+    }
 }
